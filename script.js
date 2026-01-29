@@ -1,6 +1,6 @@
-// --- YOUR FIREBASE CONFIGURATION ---
+// --- YOUR FIREBASE CONFIGURATION (COMPAT VERSION) ---
 const firebaseConfig = {
-  apiKey: "PASTE_THE_KEY_FROM_FIREBASE_HERE", 
+  apiKey: "AIzaSyBWNkOlYW2tS9pYg7HaB6c8E9PeRjmMl-8",
   authDomain: "imatt-attendance.firebaseapp.com",
   projectId: "imatt-attendance",
   storageBucket: "imatt-attendance.firebasestorage.app",
@@ -8,6 +8,17 @@ const firebaseConfig = {
   appId: "1:629926774336:web:4f50984f244b75cda101a5",
   measurementId: "G-KLR6X3V9MK"
 };
+
+// Initialize Firebase using the COMPAT mode (This matches your index.html)
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);

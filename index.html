@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMATT College | Attendance Portal</title>
+    <link rel="icon" type="image/jpg" href="IC.jpg">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="loginOverlay" class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <img src="IC.jpg" alt="IMATT Logo" class="login-logo">
+                <h1>IMATT COLLEGE</h1>
+                <p>Portal Access</p>
+            </div>
+            <div class="login-body">
+                <div class="input-container">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="Enter Email">
+                </div>
+                <div class="input-container">
+                    <label>Password</label>
+                    <input type="password" id="loginPass" placeholder="••••••••">
+                </div>
+                <button onclick="handleLogin()" class="btn-login">Sign In</button>
+                <p id="loginError" class="login-error-msg"></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainSystem" class="dashboard-container" style="display: none;">
+        <nav class="sidebar">
+            <div class="logo-container">
+                <img src="IC.jpg" alt="IMATT Logo" class="college-logo">
+                <h2>IMATT COLLEGE</h2>
+            </div>
+            <ul>
+                <li><a href="#" onclick="showSection('dashboard')" id="nav-dash" class="active">Dashboard</a></li>
+                <li><a href="#" onclick="showSection('classes')" id="nav-class">Manage Classes</a></li>
+                <li id="adminOnlyLink" style="display:none;"><a href="#" onclick="showSection('admin')" id="nav-admin">Add Lecturers</a></li>
+            </ul>
+        </nav>
+
+        <main class="content">
+            <header>
+                <h1 id="sectionTitle">Dashboard</h1>
+                <div class="user-info">
+                    Welcome, <strong id="displayName"></strong> | <a href="#" onclick="location.reload()">Logout</a>
+                </div>
+            </header>
+
+            <div id="dashboardSection">
+                <section class="stats-cards">
+                    <div class="card"><h3>Total Classes</h3><p id="classCount">0</p></div>
+                </section>
+            </div>
+
+            <div id="adminSection" style="display:none;">
+                <section class="form-container">
+                    <h2>Register New Lecturer</h2>
+                    <div class="input-grid">
+                        <input type="text" id="lecName" placeholder="Lecturer Full Name">
+                        <input type="email" id="lecEmail" placeholder="Lecturer Email">
+                        <input type="password" id="lecPass" placeholder="Assign Password">
+                        <button onclick="addLecturer()" class="btn-primary">Create Lecturer Account</button>
+                    </div>
+                </section>
+            </div>
+
+            <div id="classesSection" style="display:none;">
+                <section class="form-container">
+                    <h2>Add New Class</h2>
+                    <div class="input-grid">
+                        <input type="text" id="dept" placeholder="Department (e.g., Business)">
+                        <select id="year">
+                            <option value="">Select Year</option>
+                            <option value="1">Year 1</option>
+                            <option value="2">Year 2</option>
+                            <option value="3">Year 3</option>
+                            <option value="4">Year 4</option>
+                        </select>
+                        <input type="text" id="module" placeholder="Module (e.g., Accounting)">
+                        <input type="number" id="capacity" placeholder="Total Students">
+                        <button onclick="createNewClass()" class="btn-primary" style="grid-column: span 2;">Register Class</button>
+                    </div>
+                </section>
+                <div id="classListItems" class="class-grid"></div>
+            </div>
+
+            <div id="attendanceSection" style="display:none;">
+                <button onclick="showSection('classes')" class="btn-secondary">← Back</button>
+                <h2 id="activeClassName" style="margin:20px 0;"></h2>
+                <div class="form-container">
+                    <div class="input-row">
+                        <input type="text" id="stdName" placeholder="Student Name">
+                        <input type="text" id="stdID" placeholder="ID Number">
+                        <button onclick="addStudentToClass()" class="btn-primary">Add</button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>ID</th><th>Name</th><th>Present</th><th>Absent</th></tr></thead>
+                        <tbody id="attendanceTableBody"></tbody>
+                    </table>
+                    <button onclick="saveAttendanceSession()" class="btn-primary" style="margin-top:20px; width:100%;">Submit Attendance</button>
+                </div>
+            </div>
+
+            <div id="recordsSection" style="display:none;">
+                <button onclick="showSection('classes')" class="btn-secondary">← Back</button>
+                <h2 id="recordTitle" style="margin:20px 0;">History</h2>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Date</th><th>Present</th><th>Absent</th><th>Total</th></tr></thead>
+                        <tbody id="recordsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

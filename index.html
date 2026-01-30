@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMATT College | Attendance Cloud</title>
+    <link rel="icon" type="image/jpg" href="IC.jpg">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="loginOverlay" class="login-wrapper">
+        <div class="login-card">
+            <div class="login-branding">
+                <img src="IC.jpg" alt="IMATT Logo" class="login-logo">
+                <h1>IMATT COLLEGE</h1>
+                <p class="motto-text">"Education is the source of human progress"</p>
+            </div>
+            
+            <div class="login-body">
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="loginEmail" placeholder="Lecturer Email" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="loginPass" placeholder="Password" required>
+                </div>
+                <button onclick="handleLogin()" class="btn-login" id="loginBtn">
+                    <span>Sign In to Portal</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <p id="loginError" class="login-error-msg" style="display:none; color: #d32f2f; margin-top: 10px; font-weight: bold;"></p>
+            </div>
+            
+            <div class="login-footer">
+                <p>Affiliated with <strong>University of Sierra Leone</strong></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="mainSystem" class="app-container" style="display: none;">
+        <nav class="sidebar">
+            <div class="sidebar-brand">
+                <img src="IC.jpg" alt="IMATT Logo">
+                <div class="brand-text">
+                    <h3>IMATT Portal</h3>
+                    <span>Cloud Sync Active</span>
+                </div>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="#" onclick="showSection('dashboard')" id="nav-dash" class="active">
+                    <i class="fas fa-chart-line"></i> <span>Dashboard</span>
+                </a></li>
+                <li><a href="#" onclick="showSection('classes')" id="nav-class">
+                    <i class="fas fa-plus-square"></i> <span>Add New Module</span>
+                </a></li>
+                <li id="adminOnlyLink" style="display:none;"><a href="#" onclick="showSection('admin')" id="nav-admin">
+                    <i class="fas fa-user-shield"></i> <span>Manage Lecturers</span>
+                </a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <button onclick="logout()" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                </button>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="top-header">
+                <div class="header-left">
+                    <h1>IMATT Attendance</h1>
+                    <p id="currentDateDisplay">Academic Session 2025/2026</p>
+                </div>
+                <div class="user-pill">
+                    <span id="displayName">Loading...</span>
+                    <div class="status-dot"></div>
+                    <i class="fas fa-user-circle"></i>
+                </div>
+            </header>
+
+            <div id="dashboardSection">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon"><i class="fas fa-book-open"></i></div>
+                        <div class="stat-info">
+                            <h4 id="classCount">0</h4>
+                            <p>My Active Modules</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 style="margin-top: 30px; color: var(--dark); border-bottom: 2px solid #eee; padding-bottom: 10px;">
+                    <i class="fas fa-list"></i> Your Modules
+                </h2>
+                <div id="classListItems" class="class-grid">
+                    </div>
+            </div>
+
+            <div id="adminSection" style="display:none;">
+                <div class="glass-card">
+                    <h2><i class="fas fa-user-plus"></i> Register New Lecturer</h2>
+                    <div class="input-grid">
+                        <input type="text" id="lecName" placeholder="Full Name">
+                        <input type="email" id="lecEmail" placeholder="Email Address">
+                        <button onclick="addLecturer()" class="btn-primary">Create Account</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="classesSection" style="display:none;">
+                <div class="glass-card">
+                    <h2><i class="fas fa-plus-circle"></i> Setup New Module</h2>
+                    <p style="color: #666; margin-bottom: 15px;">Register your module to start taking attendance.</p>
+                    <div class="input-grid">
+                        <input type="text" id="dept" placeholder="Department (e.g. ICT)">
+                        <input type="text" id="module" placeholder="Module Title">
+                        <select id="year">
+                            <option value="1">Year 1</option>
+                            <option value="2">Year 2</option>
+                            <option value="3">Year 3</option>
+                            <option value="4">Year 4</option>
+                        </select>
+                        <button onclick="createNewClass()" class="btn-primary">Save & Start</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="attendanceSection" style="display:none;">
+                <h2 id="activeClassName"></h2>
+                
+                <div class="glass-card search-box" style="margin-bottom: 20px;">
+                    <div class="input-group">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="studentSearch" onkeyup="filterStudents()" placeholder="Search student by name or ID...">
+                    </div>
+                </div>
+
+                <div class="glass-card">
+                    <h3>Enroll Student</h3>
+                    <div class="input-grid">
+                        <input type="text" id="stdName" placeholder="Student Name">
+                        <input type="text" id="stdID" placeholder="ID Number (e.g. IMATT/2024/001)">
+                        <button onclick="addStudent()" class="btn-primary">Enroll</button>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Student Name</th>
+                                <th class="center">Present</th>
+                                <th class="center">Absent</th>
+                            </tr>
+                        </thead>
+                        <tbody id="attendanceTableBody"></tbody>
+                    </table>
+                </div>
+                <button onclick="submitAttendance()" class="btn-submit">
+                    <i class="fas fa-cloud-upload-alt"></i> Sync Session to Cloud
+                </button>
+            </div>
+
+            <div id="recordsSection" style="display:none;">
+                <h2 id="recordTitle"></h2>
+                <div class="table-container">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Sessions Attended</th>
+                                <th>Attendance %</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsTableBody"></tbody>
+                    </table>
+                </div>
+                <button onclick="showSection('dashboard')" class="btn-primary" style="margin-top: 20px; background: #718096;">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script src="script.js"></script>
+</body>
+</html>
